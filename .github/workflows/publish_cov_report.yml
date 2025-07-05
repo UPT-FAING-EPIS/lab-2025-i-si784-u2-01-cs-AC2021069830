@@ -1,43 +1,63 @@
-name: Publicar reporte de cobertura
+name: Publish Coverage Report
 
 on:
   push:
-    branches: [main]
-
-env:
-  DOTNET_VERSION: '8.0'
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build-and-publish-coverage:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
 
-      - name: Restore & Build
-        run: |
-          dotnet restore PrimeService/Primes.Lib/Primes.Lib.csproj
-          dotnet build PrimeService/Primes.Lib/Primes.Lib.csproj --configuration Release
+    - name: Restore dependencies
+      run: dotnet restore MyMath.sln
+      working-directory: MyMath
 
-      - name: Run tests and collect coverage
-        run: |
-          dotnet test PrimeService/Primes.Tests/Primes.Tests.csproj --collect:"XPlat Code Coverage"
+    - name: Build the project
+      run: dotnet build MyMath.sln --configuration Release
+      working-directory: MyMath
 
-      - name: Install ReportGenerator
-        run: dotnet tool install -g dotnet-reportgenerator-globaltool
+    - name: Run tests and collect code coverage
+      run: dotnet test MyMath.sln --configuration Release --collect:"XPlat Code Coverage"
+      working-directory: MyMath
 
-      - name: Generate coverage report
-        run: |
-          reportgenerator "-reports:PrimeService/Primes.Tests/TestResults/**/*.cobertura.xml" "-targetdir:coverage-report" -reporttypes:Html
+    - name: Install ReportGenerator
+      run: dotnet tool install -g dotnet-reportgenerator-globaltool
+      # Ensure the tool is available in the PATH for subsequent steps
+      # Note: This is often done automatically, but explicitly adding to PATH is safer.
 
-      - name: Publish coverage report to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./coverage-report
-          keep_files: true
+    - name: Add .NET tools to PATH
+      # This step makes the 'reportgenerator' command available directly.
+      run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+    - name: Generate coverage report
+      run: |
+        reportgenerator "-reports:**/coverage.cobertura.xml" "-targetdir:coverage-report" -reporttypes:HTML
+      working-directory: MyMath
+
+    - name: Publish coverage report to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: MyMath/coverage-report
+        user_name: 'github-actions'
+        user_email: 'github-actions@github.com'
+        publish_branch: gh-pages
+        allow_empty_commit: false
+        force_orphan: true # <--- Keeps your GitHub Pages up-to-date by overwriting.
+        keep_files: false
+        enable_jekyll: false # <--- Prevents Jekyll processing (good for raw HTML reports).
+        disable_nojekyll: false # <--- Ensures a .nojekyll file is created for raw serving.
+        exclude_assets: .github

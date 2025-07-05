@@ -211,9 +211,9 @@ for (i = 0, l = charts.length; i < l; i++) {
 
 var assemblies = [
   {
-    "name": "Primes.Lib",
+    "name": "Math.Lib",
     "classes": [
-      { "name": "Primes.Lib.PrimeService", "rp": "Primes.Lib_PrimeService.html", "cl": 8, "ucl": 0, "cal": 8, "tl": 23, "cb": 6, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Math.Lib.Rooter", "rp": "Math.Lib_Rooter.html", "cl": 12, "ucl": 0, "cal": 12, "tl": 20, "cb": 4, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
     ]},
 ];
 

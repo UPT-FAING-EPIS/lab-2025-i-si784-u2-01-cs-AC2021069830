@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Version>1.0.0</Version>
-    <PackageId>PrimeService_WS2</PackageId>
+    <PackageId>MyMath.Lib_WS</PackageId>
 
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -11,10 +11,10 @@
     <!-- Metadatos adicionales recomendados para tu paquete NuGet -->
     <Authors>Wsalas651</Authors>
     <Company>UPT-FAING-EPIS</Company>
-    <Description>Librería de Servicios Primarios.</Description>
+    <Description>Librería ejemplo que brinda funcionalidades matemáticas básicas.</Description>
     
     <!-- IMPORTANTE: Actualiza esta URL con la URL de tu repositorio en GitHub -->
-    <RepositoryUrl>https://github.com/UPT-FAING-EPIS/lab-2025-i-si784-u2-02-cs-Wsalas651-1</RepositoryUrl>
+    <RepositoryUrl>https://github.com/UPT-FAING-EPIS/lab-2025-i-si784-u2-01-cs-Wsalas651</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     
     <!-- Elige una licencia. MIT es común para proyectos open source. -->
